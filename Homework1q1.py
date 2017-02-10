@@ -1,3 +1,9 @@
+'''
+MTH 4600: Data Analysis and Simulation
+Homework 1
+Question 1(a) and (b)
+Group: Jaime Abbariao, Bell Chen, Jonnathan Romero
+'''
 import numpy as np
 import time
 import matplotlib.pyplot as plt
