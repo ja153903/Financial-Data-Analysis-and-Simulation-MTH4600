@@ -44,40 +44,39 @@ def minimumVarianceLine(cov, mu):
 	for Financial Markets
 	'''
 	A = np.dot(np.dot(mu.T, np.linalg.inv(cov_mat)), u)
-    B = np.dot(np.dot(mu.T, np.linalg.inv(cov_mat)), mu)
-    C = np.dot(np.dot(u.T, np.linalg.inv(cov_mat)), u)
-    D = B*C - A*A
-    p1 = np.dot(B * np.linalg.inv(cov_mat), u)
-    p2 = np.dot(A * np.linalg.inv(cov_mat), mu)
-    p3 = np.dot(C*np.linalg.inv(cov_mat), mu) - np.dot(A*np.linalg.inv(cov_mat),u)
-    
+    	B = np.dot(np.dot(mu.T, np.linalg.inv(cov_mat)), mu)
+	C = np.dot(np.dot(u.T, np.linalg.inv(cov_mat)), u)
+	D = B*C - A*A
+	p1 = np.dot(B * np.linalg.inv(cov_mat), u)
+	p2 = np.dot(A * np.linalg.inv(cov_mat), mu)
+	p3 = np.dot(C*np.linalg.inv(cov_mat), mu) - np.dot(A*np.linalg.inv(cov_mat),u)
+    	
+	eff_mu = [] # initalize lists to store the efficient means
+	eff_vol = [] # initialize lists to store the efficient volalities
+    	
+	'''
+	Next, we want to loop through possible target values for the mean
+	from which we can gather the efficient portfolios.
+	'''
+    	for x in np.arange(0.0, 10, 0.1):
+        	eff_mu.append(sample_mean(((p1 - p2 + x *(p3)) / D), mu))
+        	eff_vol.append(sample_vol(((p1 - p2 + x *(p3)) / D), cov_mat))
+    	
+	eff_mu = np.array(eff_mu)
+    	eff_vol = np.array(eff_vol)
 
-    eff_mu = [] # initalize lists to store the efficient means
-    eff_vol = [] # initialize lists to store the efficient volalities
-    
-    '''
-    Next, we want to loop through possible target values for the mean
-    from which we can gather the efficient portfolios.
-    '''
-    for x in np.arange(0.0, 10, 0.1):
-        eff_mu.append(sample_mean(((p1 - p2 + x *(p3)) / D), mu))
-        eff_vol.append(sample_vol(((p1 - p2 + x *(p3)) / D), cov_mat))
-    
-    eff_mu = np.array(eff_mu)
-    eff_vol = np.array(eff_vol)
+    	'''
+    	Calculates the weights of the minimum variance portfolio 
+    	where (A/C) is chosen to minimize the variance
+    	'''
+    	mvp_weights = ((p1 - p2 + (A/C) *(p3)) / D)
+    	
+	mvp_mu = np.dot(mu, mvp_weights.T) # calculates mean of MVP
+    	mvp_vol = np.sqrt((B - 2 * mvp_mu*A + (mvp_mu**2)*C) /D) # calculates volatility of MVP
 
-    '''
-    Calculates the weights of the minimum variance portfolio 
-    where (A/C) is chosen to minimize the variance
-    '''
-    mvp_weights = ((p1 - p2 + (A/C) *(p3)) / D)
-    
-    mvp_mu = np.dot(mu, mvp_weights.T) # calculates mean of MVP
-    mvp_vol = np.sqrt((B - 2 * mvp_mu*A + (mvp_mu**2)*C) /D) # calculates volatility of MVP
+    	specific_weights = ((p1 - p2 + 0.3 *(p3)) / D)
 
-    specific_weights = ((p1 - p2 + 0.3 *(p3)) / D)
-
-    return eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights
+    	return eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights
 
 eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights = minimumVarianceLine(cov_mat, mu)
 
