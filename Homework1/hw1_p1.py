@@ -120,3 +120,8 @@ plt.xlim([-0.1, 1.1])
 plt.scatter(list(asian_price.keys()), list(asian_price.values()), color='red', label='Asian')
 plt.legend()
 plt.show()
+
+
+
+
+
