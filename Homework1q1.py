@@ -62,8 +62,6 @@ def asianPayoff(s0, s1, s2):
 	ap = np.average([s0[len(s0)-1], s1[len(s1)-1], s2[len(s2)-1]])-110
 	return ap/M if ap > 0 else 0
 
-t0 = time.clock()
-
 
 for rho in rhos: # we loop through the values of rho
 	
@@ -108,10 +106,12 @@ for rho in rhos: # we loop through the values of rho
 	lookback_price[rho] = lookback_payoff_sum * discount_factor
 	asian_price[rho] = asian_payoff_sum *discount_factor
 
-print('Clock: ', time.clock() - t0)
-print('Lookback Option: ', lookback_price)
+
+print('Lookback Option: ')
+print([lookback_price[x] for x in rhos])
 print('\n')
-print('Asian Option: ', asian_price)
+print('Asian Option: ')
+print([asian_price[x] for x in rhos])
 
 plt.scatter(list(lookback_price.keys()), list(lookback_price.values()), label='Lookback')
 plt.title('1(a) and 1(b) Option')
