@@ -1,3 +1,8 @@
+'''
+MTH 4600: Data Analysis and Simulation
+Homework 1
+Group: Jaime Abbariao, Bell Chen, Jonnathan Romero
+'''
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
