@@ -76,9 +76,13 @@ def minimumVarianceLine(cov, mu):
 
     	specific_weights = ((p1 - p2 + 0.3 *(p3)) / D)
 
-    	return eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights
+    	
+	w0 = (np.dot((B/D)*np.linalg.inv(cov_mat),u) - (np.dot((A/D)*np.linalg.inv(cov_mat), mu)))
+	w1 = (np.dot((C/D)*np.linalg.inv(cov_mat), mu) - (np.dot((A/D)*np.linalg.inv(cov_mat), u)))
 
-eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights = minimumVarianceLine(cov_mat, mu)
+        return eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights, w0, w1
+
+eff_mu, eff_vol, mvp_mu, mvp_vol, mvp_weights, specific_weights, w0, w1 = minimumVarianceLine(cov_mat, mu)
 
 '''
 Question 2(a)
