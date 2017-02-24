@@ -1,4 +1,5 @@
 import numpy as np 
+import numpy as np 
 import matplotlib.pyplot as plt 
 
 S0 = 100.0 # stock price
@@ -37,7 +38,9 @@ s3_rand = np.sqrt(dt) * s3_vol
 rhos = [x for x in np.arange(0.0, 1.1, 0.1)] # generates the rhos
 
 op1_price = {}
-vbar = v2bar = 0
+op2_price = {}
+
+vbar = v2bar = avgbar = 0
 
 for rho in rhos:
 	s1 = s2 = s3 = np.zeros(I+1)
@@ -65,13 +68,19 @@ for rho in rhos:
 		s3 = S0 * np.exp(s3_drift + s3_rand * s3cs)
 
 		smax = max(np.max(s1), np.max(s2), np.max(s3))
+		savgmax = max((s1[len(s1)-1] + s2[len(s2)-1] + s3[len(s3)-1])/3, 0)
+
 		payoff = max(smax - K, 0) * discount_factor
+		avgpayoff = max(savgmax - K, 0) * discount_factor
 		
 		vbar = ((i-1) * vbar + payoff)/i
+		avgbar = ((i-1)*avgbar + avgpayoff)/i
 		v2bar = ((i-1) * v2bar + v2bar*v2bar)/i
 
 	op1_price[rho] = vbar
+	op2_price[rho] = avgbar
 	print(rho, op1_price[rho])
+	print(rho, op2_price[rho])
 
 
 
