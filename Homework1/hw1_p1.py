@@ -1,11 +1,14 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
+import numpy as np 
+import matplotlib.pyplot as plt
+import seaborn as sns 
 
 S0 = 100.0 # stock price
 K = 110.0 # strike price
 T = 0.25 # time at maturity
 r = 0.03 # short rate
-M = 10000 # number of simulations
+M = 100000 # number of simulations
 I = 252 # number of stock periods
 dt = 1.0 / I # number of steps
 
@@ -54,7 +57,7 @@ for rho in rhos:
 
 	for i in range(1, M+1):
 
-		uncorrelated_matrix = np.random.standard_normal((3, 63)) # generate uncorrelated normal
+		uncorrelated_matrix = np.random.standard_normal((3, 62)) # generate uncorrelated normal
 		correlated_matrix = np.dot(cholesky_matrix, uncorrelated_matrix) # generate correlated normal
 
 		s1cs = np.cumsum(correlated_matrix[0])
@@ -85,12 +88,24 @@ for rho in rhos:
 			error_v = 1.96 * std_dev_v / np.sqrt(i)
 			error_a = 1.96 * std_dev_a / np.sqrt(i)
 
-			print(rho, vbar, error_v, avgbar, error_a)
+			#print(rho, vbar, error_v, avgbar, error_a)
       
-        op1_price[rho] = vbar
+	op1_price[rho] = vbar
 	op2_price[rho] = avgbar
+	
+print('op1 Option: ')
+print([op1_price[x] for x in rhos])
+print('\n')
+print('op2 Option: ')
+print([op2_price[x] for x in rhos])
 
-
-
+plt.scatter(list(op1_price.keys()), list(op1_price.values()), label='op1')
+plt.title('1(a) and 1(b) Option')
+plt.xlabel('Rho')
+plt.ylabel('Price of the Option')
+plt.xlim([-0.1, 1.1])
+plt.scatter(list(op2_price.keys()), list(op2_price.values()), color='red', label='op2')
+plt.legend()
+plt.show()
 
 
