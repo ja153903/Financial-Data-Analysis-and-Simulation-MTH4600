@@ -1,5 +1,4 @@
 import numpy as np 
-import numpy as np 
 import matplotlib.pyplot as plt 
 
 S0 = 100.0 # stock price
@@ -40,8 +39,8 @@ rhos = [x for x in np.arange(0.0, 1.1, 0.1)] # generates the rhos
 op1_price = {}
 op2_price = {}
 
-vbar = v2bar = avgbar = 0
-
+vbar = v2bar = avgbar = avg2bar = 0
+print('rho', 'vbar', 'errorv', 'avgbar', 'errora')
 for rho in rhos:
 	s1 = s2 = s3 = np.zeros(I+1)
 	covariance_matrix = [[1, rho, rho],[rho, 1, rho], [rho, rho, 1]]
@@ -62,7 +61,6 @@ for rho in rhos:
 		s2cs = np.cumsum(correlated_matrix[1])
 		s3cs = np.cumsum(correlated_matrix[2])
 
-	
 		s1 = S0 * np.exp(s1_drift + s1_rand * s1cs)
 		s2 = S0 * np.exp(s2_drift + s2_rand * s2cs)
 		s3 = S0 * np.exp(s3_drift + s3_rand * s3cs)
@@ -74,13 +72,23 @@ for rho in rhos:
 		avgpayoff = max(savgmax - K, 0) * discount_factor
 		
 		vbar = ((i-1) * vbar + payoff)/i
-		avgbar = ((i-1)*avgbar + avgpayoff)/i
-		v2bar = ((i-1) * v2bar + v2bar*v2bar)/i
+		avgbar = ((i-1) * avgbar + avgpayoff)/i
 
-	op1_price[rho] = vbar
+		v2bar = ((i-1) * v2bar + payoff*payoff)/i
+		avg2bar = ((i-1) * avg2bar + avgpayoff*avgpayoff)/i
+
+		if i % 10000 == 0:
+
+			std_dev_v = np.sqrt(v2bar - vbar * vbar)
+			std_dev_a = np.sqrt(avg2bar - avgbar * avgbar)
+
+			error_v = 1.96 * std_dev_v / np.sqrt(i)
+			error_a = 1.96 * std_dev_a / np.sqrt(i)
+
+			print(rho, vbar, error_v, avgbar, error_a)
+      
+        op1_price[rho] = vbar
 	op2_price[rho] = avgbar
-	print(rho, op1_price[rho])
-	print(rho, op2_price[rho])
 
 
 
