@@ -29,8 +29,7 @@ market_rf = sm.add_constant(market_rf)
 
 # creates a dictionary of fits where key is the stock name
 # and value is the fit
-results = {x : smf.OLS(monthly_rf[x], market_rf).fit() 
-									for x in monthly_rf}
+results = {x : smf.OLS(monthly_rf[x], market_rf).fit() for x in monthly_rf}
 
 # look at all the information
 # run through the list of stock names
@@ -42,16 +41,14 @@ for x in monthly_rf:
 	print('Stock: %s   Alpha: %8.4f   Beta: %8.4f' % (x, results[x].params[0], results[x].params[1]))
 
 # creates a list of underperforming stocks
-under_performers = [key for key in results.keys()
-									if results[key].tvalues[0] < -1.697]
+under_performers = [key for key in results.keys() if results[key].tvalues[0] < -1.697]
 
 # Prints out the underperformers
 for x in under_performers:
 	print('%s' % x)
 
 # creates a list of overperforming stocks
-over_performers = [key for key in results.keys()
-									if results[key].tvalues[0] > 1.697]
+over_performers = [key for key in results.keys() if results[key].tvalues[0] > 1.697]
 
 # Prints out the overperformers
 for x in over_performers:
