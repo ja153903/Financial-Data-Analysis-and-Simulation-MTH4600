@@ -61,10 +61,10 @@ for x in over_performers:
 market_return = allData['S&P500'].mean()
 
 # Sample return from 30 DJI stocks
-monthly_return = allData.drop('S&P500', axis=1).copy().mean().sort_index()
+monthly_return = allData.drop('S&P500', axis=1).copy().mean()
 
 # Sample covariance from 30 DJI stocks
-monthly_covariance = allData.drop('S&P500', axis=1).copy().cov().sort_index()
+monthly_covariance = allData.drop('S&P500', axis=1).copy().cov()
 
 # calculates returns through CAPM
 returns = [(rf + results[x].params[1]*(market_return - rf)) for x in results]
